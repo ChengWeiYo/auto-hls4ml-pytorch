@@ -15,14 +15,4 @@
 
 .bin
 
-# 忽略 hls/ 底下所有檔案與資料夾
-TokenReductionPT/hls/*
-
-# 反轉 (unignore) 特定資料夾
-!TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/
-
-# 再看情況是否需要包含其中所有子檔案/子目錄 (有時必須多加這行)
-!TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/**
-
-# 如果還有要再次忽略的子目錄 (如 myproject_prj/)，就直接指定：
-TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/myproject_prj/
+**/myproject_prj/
