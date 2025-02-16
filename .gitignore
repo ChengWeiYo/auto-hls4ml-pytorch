@@ -14,4 +14,12 @@
 .lock
 
 .bin
-.pdiTokenReductionPT/hls/
+
+# 1. 忽略整個 hls/ 資料夾底下所有檔案與資料夾
+TokenReductionPT/hls/*
+
+# 2. 反轉（！）想要追蹤的子資料夾：deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/
+!TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/
+
+# 3. 在反轉後，再度忽略該子資料夾底下的 myproject_prj/
+TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/myproject_prj/
