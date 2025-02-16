@@ -1,0 +1,16 @@
+[
+  {
+    "directory": "/home/chengwei/auto-hls4ml-pytorch/hls_component",
+    "arguments": [
+      "/home/share/Xilinx/Vitis_HLS/2023.2/tps/lnx64/gcc-8.3.0/bin/g++",
+      "-isystem/home/share/Xilinx/Vitis_HLS/2023.2/include",
+      "-isystem/home/share/Xilinx/Vitis_HLS/2023.2/include/etc",
+      "-isystem/home/share/Xilinx/Vitis_HLS/2023.2/include/ap_sysc",
+      "-isystem/home/share/Xilinx/Vitis_HLS/2023.2/lnx64/tools/auto_cc/include",
+      "-isystem/home/share/Xilinx/Vitis_HLS/2023.2/lnx64/tools/systemc/include",
+      "--compile",
+      "/home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_128/firmware/myproject.cpp"
+    ],
+    "file": "/home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_128/firmware/myproject.cpp"
+  }
+]
