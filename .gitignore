@@ -16,3 +16,6 @@
 .bin
 
 **/myproject_prj/
+**/.Xil/
+
+.tar.gz
