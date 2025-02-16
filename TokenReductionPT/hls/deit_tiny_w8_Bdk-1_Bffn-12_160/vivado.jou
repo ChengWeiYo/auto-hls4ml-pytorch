@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Sat Jan 18 06:55:51 2025
+# Process ID: 18132
+# Current directory: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_160
+# Command line: vivado -mode batch -source vivado_synth.tcl
+# Log file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_160/vivado.log
+# Journal file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_160/vivado.jou
+# Running On        :r7515ed520
+# Platform          :CentOS
+# Operating System  :CentOS Linux release 8.5.2111
+# Processor Detail  :AMD EPYC 7262 8-Core Processor
+# CPU Frequency     :3193.899 MHz
+# CPU Physical cores:8
+# CPU Logical cores :16
+# Host memory       :134717 MB
+# Swap memory       :8589 MB
+# Total Virtual     :143307 MB
+# Available Virtual :105207 MB
+#-----------------------------------------------------------
+source vivado_synth.tcl

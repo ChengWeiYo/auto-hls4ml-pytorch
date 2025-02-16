@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Sun Jan  5 08:00:41 2025
+# Process ID: 3049888
+# Current directory: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_288
+# Command line: vivado -mode batch -source vivado_synth.tcl
+# Log file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_288/vivado.log
+# Journal file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_288/vivado.jou
+# Running On: Kaohsiung, OS: Linux, CPU Frequency: 4800.000 MHz, CPU Physical cores: 24, Host memory: 134739 MB
+#-----------------------------------------------------------
+source vivado_synth.tcl
