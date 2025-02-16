@@ -15,11 +15,14 @@
 
 .bin
 
-# 1. 忽略整個 hls/ 資料夾底下所有檔案與資料夾
+# 忽略 hls/ 底下所有檔案與資料夾
 TokenReductionPT/hls/*
 
-# 2. 反轉（！）想要追蹤的子資料夾：deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/
+# 反轉 (unignore) 特定資料夾
 !TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/
 
-# 3. 在反轉後，再度忽略該子資料夾底下的 myproject_prj/
+# 再看情況是否需要包含其中所有子檔案/子目錄 (有時必須多加這行)
+!TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/**
+
+# 如果還有要再次忽略的子目錄 (如 myproject_prj/)，就直接指定：
 TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.5/myproject_prj/
