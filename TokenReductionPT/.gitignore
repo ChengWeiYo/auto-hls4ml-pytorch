@@ -15,7 +15,7 @@
 # logs, results, txt files
 *.log
 *.out
-*.txt
+# *.txt
 #*.csv
 *.tsv
 # exception
