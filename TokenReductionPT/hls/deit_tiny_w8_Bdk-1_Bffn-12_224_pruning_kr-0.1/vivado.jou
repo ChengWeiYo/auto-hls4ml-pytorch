@@ -1,14 +1,24 @@
 #-----------------------------------------------------------
-# Vivado v2023.2 (64-bit)
-# SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
-# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
-# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Fri Jan 17 18:12:34 2025
-# Process ID: 31237
-# Current directory: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Mon Apr  7 14:36:57 2025
+# Process ID: 307245
+# Current directory: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.1
 # Command line: vivado -mode batch -source vivado_synth.tcl
-# Log file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning/vivado.log
-# Journal file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning/vivado.jou
-# Running On: Kaohsiung, OS: Linux, CPU Frequency: 2000.000 MHz, CPU Physical cores: 24, Host memory: 134739 MB
+# Log file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.1/vivado.log
+# Journal file: /home/chengwei/auto-hls4ml-pytorch/TokenReductionPT/hls/deit_tiny_w8_Bdk-1_Bffn-12_224_pruning_kr-0.1/vivado.jou
+# Running On        :PCSLasVegas.iee.nycu.edu.tw
+# Platform          :unknown
+# Operating System  :unknown
+# Processor Detail  :AMD EPYC 7262 8-Core Processor
+# CPU Frequency     :1984.159 MHz
+# CPU Physical cores:8
+# CPU Logical cores :16
+# Host memory       :133979 MB
+# Swap memory       :4294 MB
+# Total Virtual     :138274 MB
+# Available Virtual :117136 MB
 #-----------------------------------------------------------
 source vivado_synth.tcl

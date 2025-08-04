@@ -5,7 +5,7 @@
 
 #define elements_after_1st_pruning 26688 // 139 * 192
 #define elements_after_2nd_pruning 18816 // 98 * 192
-#define elements_after_3rd_pruning 13284 // 69 * 192
+#define elements_after_3rd_pruning 13248 // 69 * 192
 // #define elements_after_1st_pruning 19008 // 99 * 192
 // #define elements_after_2nd_pruning 9600 // 50 * 192
 // #define elements_after_3rd_pruning 4992 // 26 * 192
@@ -450,7 +450,7 @@ void myproject(
         layer55_out_pruned, // 輸出保留Token流
         // 2,            // 每2個輸入元素進行一次pruning
         0.7,                // keep rate
-        139                // Input Token Number
+        140                // Input Token Number
     );
     // std::cout << "2nd pruning done" << std::endl;
 
@@ -570,7 +570,7 @@ void myproject(
         layer73_out_pruned, // 輸出保留Token流
         // 2,            // 每2個輸入元素進行一次pruning
         0.7,                // keep rate
-        98                // Input Token Number
+        99                // Input Token Number
     );
     // std::cout << "3rd pruning done" << std::endl;
 

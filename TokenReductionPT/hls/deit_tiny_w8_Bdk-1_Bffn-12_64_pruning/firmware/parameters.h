@@ -175,6 +175,14 @@
 #include "weights/scale4.h"
 #include "weights/bias4.h"
 
+#define tokens_after_1st_pruning 9
+#define tokens_after_2nd_pruning 5
+#define tokens_after_3rd_pruning 3
+// #define tokens_after_1st_pruning 17
+// #define tokens_after_2nd_pruning 17
+// #define tokens_after_3rd_pruning 17
+#define enable_pruning 1
+
 // hls-fpga-machine-learning insert layer-config
 // layers_pruning
 struct config_prune
@@ -204,6 +212,7 @@ struct config17 : nnet::layernorm_config {
 
 // layers_0_self_attn
 struct config18 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
@@ -295,6 +304,7 @@ struct config23 : nnet::layernorm_config {
 
 // layers_1_self_attn
 struct config24 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
@@ -386,6 +396,7 @@ struct config29 : nnet::layernorm_config {
 
 // layers_2_self_attn
 struct config30 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
@@ -477,6 +488,8 @@ struct config35 : nnet::layernorm_config {
 
 // layers_3_self_attn
 struct config36 : nnet::mha_config {
+    static const bool enable_topk  = enable_pruning;   // 第4層需要 top-k
+    static const int  topk         = 8;      // 需要保留的 tokens 數量
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
@@ -511,7 +524,7 @@ struct config37 : nnet::merge_config {
 
 // layers_3_norm2
 struct config38 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -527,7 +540,7 @@ struct config38 : nnet::layernorm_config {
 
 // layers_3_ffn
 struct config39 : nnet::ffn_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -547,12 +560,12 @@ struct config39 : nnet::ffn_config {
 
 // layers_3_add2
 struct config40 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_4_norm1
 struct config41 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -568,10 +581,11 @@ struct config41 : nnet::layernorm_config {
 
 // layers_4_self_attn
 struct config42 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -597,12 +611,12 @@ struct config42 : nnet::mha_config {
 
 // layers_4_add1
 struct config43 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_4_norm2
 struct config44 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -618,7 +632,7 @@ struct config44 : nnet::layernorm_config {
 
 // layers_4_ffn
 struct config45 : nnet::ffn_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -638,12 +652,12 @@ struct config45 : nnet::ffn_config {
 
 // layers_4_add2
 struct config46 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_5_norm1
 struct config47 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -659,10 +673,11 @@ struct config47 : nnet::layernorm_config {
 
 // layers_5_self_attn
 struct config48 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -688,12 +703,12 @@ struct config48 : nnet::mha_config {
 
 // layers_5_add1
 struct config49 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_5_norm2
 struct config50 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -709,7 +724,7 @@ struct config50 : nnet::layernorm_config {
 
 // layers_5_ffn
 struct config51 : nnet::ffn_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -729,12 +744,12 @@ struct config51 : nnet::ffn_config {
 
 // layers_5_add2
 struct config52 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_6_norm1
 struct config53 : nnet::layernorm_config {
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -750,10 +765,12 @@ struct config53 : nnet::layernorm_config {
 
 // layers_6_self_attn
 struct config54 : nnet::mha_config {
+    static const bool enable_topk  = enable_pruning;
+    static const int  topk         = 4;
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 9;
+    static const unsigned seq_len = tokens_after_1st_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -779,12 +796,12 @@ struct config54 : nnet::mha_config {
 
 // layers_6_add1
 struct config55 : nnet::merge_config {
-    static const unsigned n_elem = 192*9*1;
+    static const unsigned n_elem = 192*tokens_after_1st_pruning*1;
 };
 
 // layers_6_norm2
 struct config56 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -800,7 +817,7 @@ struct config56 : nnet::layernorm_config {
 
 // layers_6_ffn
 struct config57 : nnet::ffn_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -820,12 +837,12 @@ struct config57 : nnet::ffn_config {
 
 // layers_6_add2
 struct config58 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_7_norm1
 struct config59 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -841,10 +858,11 @@ struct config59 : nnet::layernorm_config {
 
 // layers_7_self_attn
 struct config60 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -870,12 +888,12 @@ struct config60 : nnet::mha_config {
 
 // layers_7_add1
 struct config61 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_7_norm2
 struct config62 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 1;
@@ -891,7 +909,7 @@ struct config62 : nnet::layernorm_config {
 
 // layers_7_ffn
 struct config63 : nnet::ffn_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -911,12 +929,12 @@ struct config63 : nnet::ffn_config {
 
 // layers_7_add2
 struct config64 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_8_norm1
 struct config65 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 2;
@@ -932,10 +950,11 @@ struct config65 : nnet::layernorm_config {
 
 // layers_8_self_attn
 struct config66 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -961,12 +980,12 @@ struct config66 : nnet::mha_config {
 
 // layers_8_add1
 struct config67 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_8_norm2
 struct config68 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 2;
@@ -982,7 +1001,7 @@ struct config68 : nnet::layernorm_config {
 
 // layers_8_ffn
 struct config69 : nnet::ffn_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -1002,12 +1021,12 @@ struct config69 : nnet::ffn_config {
 
 // layers_8_add2
 struct config70 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_9_norm1
 struct config71 : nnet::layernorm_config {
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 2;
@@ -1023,10 +1042,12 @@ struct config71 : nnet::layernorm_config {
 
 // layers_9_self_attn
 struct config72 : nnet::mha_config {
+    static const bool enable_topk  = enable_pruning;
+    static const int  topk         = 2;
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 5;
+    static const unsigned seq_len = tokens_after_2nd_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -1052,12 +1073,12 @@ struct config72 : nnet::mha_config {
 
 // layers_9_add1
 struct config73 : nnet::merge_config {
-    static const unsigned n_elem = 192*5*1;
+    static const unsigned n_elem = 192*tokens_after_2nd_pruning*1;
 };
 
 // layers_9_norm2
 struct config74 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 2;
@@ -1073,7 +1094,7 @@ struct config74 : nnet::layernorm_config {
 
 // layers_9_ffn
 struct config75 : nnet::ffn_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -1093,12 +1114,12 @@ struct config75 : nnet::ffn_config {
 
 // layers_9_add2
 struct config76 : nnet::merge_config {
-    static const unsigned n_elem = 192*3*1;
+    static const unsigned n_elem = 192*tokens_after_3rd_pruning*1;
 };
 
 // layers_10_norm1
 struct config77 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 4;
@@ -1114,10 +1135,11 @@ struct config77 : nnet::layernorm_config {
 
 // layers_10_self_attn
 struct config78 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -1143,12 +1165,12 @@ struct config78 : nnet::mha_config {
 
 // layers_10_add1
 struct config79 : nnet::merge_config {
-    static const unsigned n_elem = 192*3*1;
+    static const unsigned n_elem = 192*tokens_after_3rd_pruning*1;
 };
 
 // layers_10_norm2
 struct config80 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 4;
@@ -1164,7 +1186,7 @@ struct config80 : nnet::layernorm_config {
 
 // layers_10_ffn
 struct config81 : nnet::ffn_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -1184,12 +1206,12 @@ struct config81 : nnet::ffn_config {
 
 // layers_10_add2
 struct config82 : nnet::merge_config {
-    static const unsigned n_elem = 192*3*1;
+    static const unsigned n_elem = 192*tokens_after_3rd_pruning*1;
 };
 
 // layers_11_norm1
 struct config83 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 4;
@@ -1205,10 +1227,11 @@ struct config83 : nnet::layernorm_config {
 
 // layers_11_self_attn
 struct config84 : nnet::mha_config {
+    static const bool enable_topk  = false;  // 不要合成 top-k
     static const unsigned n_head = 3;
     static const unsigned head_dim = 64;
     static const unsigned embed_dim = 192;
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned qkv_ram_style = nnet::block;
     static const unsigned attn_ram_style = nnet::block;
     static const unsigned out_ram_style = nnet::block;
@@ -1234,12 +1257,12 @@ struct config84 : nnet::mha_config {
 
 // layers_11_add1
 struct config85 : nnet::merge_config {
-    static const unsigned n_elem = 192*3*1;
+    static const unsigned n_elem = 192*tokens_after_3rd_pruning*1;
 };
 
 // layers_11_norm2
 struct config86 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 4;
@@ -1255,7 +1278,7 @@ struct config86 : nnet::layernorm_config {
 
 // layers_11_ffn
 struct config87 : nnet::ffn_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned hidden_dim = 768;
     static const unsigned in_ram_style = nnet::block;
@@ -1275,12 +1298,12 @@ struct config87 : nnet::ffn_config {
 
 // layers_11_add2
 struct config88 : nnet::merge_config {
-    static const unsigned n_elem = 192*3*1;
+    static const unsigned n_elem = 192*tokens_after_3rd_pruning*1;
 };
 
 // norm
 struct config4 : nnet::layernorm_config {
-    static const unsigned seq_len = 3;
+    static const unsigned seq_len = tokens_after_3rd_pruning;
     static const unsigned embed_dim = 192;
     static const unsigned table_size = 4096;
     static constexpr float table_range = 4;

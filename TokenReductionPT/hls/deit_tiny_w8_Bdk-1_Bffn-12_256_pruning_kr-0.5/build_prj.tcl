@@ -191,17 +191,17 @@ if {$opt(cosim)} {
     add_files -tb ${project_name}_test.cpp -cflags "-std=c++0x -DRTL_SIM"
     set time_start [clock clicks -milliseconds]
 
-    cosim_design -trace_level all -setup
+    cosim_design -tool vcs -trace_level all
 
     if {$opt(fifo_opt)} {
         puts "\[hls4ml\] - FIFO optimization started"
         add_vcd_instructions_tcl
     }
 
-    remove_recursive_log_wave
+    # remove_recursive_log_wave
     set old_pwd [pwd]
     cd ${project_name}_prj/solution1/sim/verilog/
-    source run_sim.tcl
+    # source run_sim.tcl
     cd $old_pwd
 
     set time_end [clock clicks -milliseconds]

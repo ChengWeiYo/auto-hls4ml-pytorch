@@ -191,7 +191,7 @@ if {$opt(cosim)} {
     add_files -tb ${project_name}_test.cpp -cflags "-std=c++0x -DRTL_SIM"
     set time_start [clock clicks -milliseconds]
 
-    cosim_design -trace_level all
+    cosim_design -tool vcs -trace_level all
 
     if {$opt(fifo_opt)} {
         puts "\[hls4ml\] - FIFO optimization started"

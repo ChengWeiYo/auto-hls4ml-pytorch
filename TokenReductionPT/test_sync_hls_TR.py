@@ -241,7 +241,7 @@ def main(args):
     pprint(transformer_quant_config)
 
     BRAMstate = gen_init_BRAMaware_state(num_layers=args.model_depth, 
-                                         weight_bits=7, 
+                                         weight_bits=8, 
                                         #  weight_bits=18, 
                                          table_input_bits=12, 
                                          table_output_bits=18, 

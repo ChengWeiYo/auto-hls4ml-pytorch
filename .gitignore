@@ -20,3 +20,5 @@
 
 *.gz
 *.v
+*.jou
+*.hprof

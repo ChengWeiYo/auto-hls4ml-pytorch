@@ -35,6 +35,7 @@ template<class data_T, class res_T, typename CONFIG_T>
 void PruningLayer(
     hls::stream<data_T> &data_in,
     hls::stream<res_T> &data_out,
+    hls::stream<int>    &topk_idx_in,  // <-- 新增: 讀取 Top-K 索引
     const float keep_rate,
     const unsigned int N
 ) {
@@ -48,10 +49,30 @@ void PruningLayer(
     hls::stream<token_buf_t> token_buffer_stream;
     #pragma HLS STREAM variable=token_buffer_stream depth=1
 
-    hls::stream<token_buf_t> sorted_token_buffer_stream;
-    #pragma HLS STREAM variable=sorted_token_buffer_stream depth=1
+    hls::stream<token_buf_t> pruned_token_buffer_stream;
+    #pragma HLS STREAM variable=pruned_token_buffer_stream depth=1
 
     #pragma HLS DATAFLOW
+
+    // 建立一個 keep_mask[N]，預設 false
+    bool keep_mask[CONFIG_T::max_tokens];
+    // #pragma HLS ARRAY_PARTITION variable=keep_mask complete dim=1
+    for (int i = 0; i < N; i++) {
+        #pragma HLS UNROLL
+        keep_mask[i] = false;
+    }
+    // std::cout << "finish keep_mask reset" << std::endl;
+
+    // 讀取 Top-K 索引，將 keep_mask[idx] = true
+    for (int i = 0; i < keep_tokens; i++) {
+        #pragma HLS PIPELINE II=1
+        int idx = topk_idx_in.read();
+        // std::cout << "Read Top-K index: " << idx << std::endl;
+        if (idx >= 0 && idx < (int)N) {
+            keep_mask[idx] = true;
+        }
+    }
+    // std::cout << "finish keep_mask update" << std::endl;
 
     // Stage 1: Read input data and store in token buffer stream
     read_input:
@@ -67,43 +88,36 @@ void PruningLayer(
         }
         token_buffer_stream.write(token_buffer);
     }
+    // std::cout << "finish read_input" << std::endl;
 
-    // Stage 2: Sort tokens (excluding cls_token)
-    sort_tokens:
+    // Stage 2: Prune tokens (excluding cls_token)
+    prune_tokens:
     for (int i = 0; i < N; i++) {
         token_buf_t token_buffer = token_buffer_stream.read();
-        if (i == 0) {
-            sorted_token_buffer_stream.write(token_buffer); // Pass cls_token directly
-        } else {
-            // Insert sorting logic here
-            // For simplicity, assuming tokens are sorted based on the first element of data
-            // You can replace this with your actual sorting logic
-            static token_buf_t token_array[CONFIG_T::max_tokens];
-            // #pragma HLS ARRAY_PARTITION variable=token_array complete dim=1
-            token_array[i-1] = token_buffer;
-            if (i == N-1) {
-                // Sort the tokens
-                // for (int m = 0; m < N-1; m++) {
-                //     for (int n = m+1; n < N-1; n++) {
-                //         if (token_array[m].data[0] < token_array[n].data[0]) {
-                //             token_buf_t temp = token_array[m];
-                //             token_array[m] = token_array[n];
-                //             token_array[n] = temp;
-                //         }
-                //     }
-                // }
-                // Write sorted tokens to stream
-                for (int k = 0; k < keep_tokens; k++) {
-                    sorted_token_buffer_stream.write(token_array[k]);
-                }
-            }
-        }
+        if (i == 0 || keep_mask[i]) {
+            pruned_token_buffer_stream.write(token_buffer); // Pass cls_token directly
+        } 
+        // else {
+        //     token_buf_t token_array[CONFIG_T::max_tokens];
+        //     // #pragma HLS ARRAY_PARTITION variable=token_array complete dim=1
+        //     token_array[i-1] = token_buffer;
+        //     if (i == N-1) {
+        //         // Write pruned tokens to stream
+        //         for (int k = 1; k < N; k++) {
+        //             // std::cout << "Token " << k << " keep_mask: " << keep_mask[k] << std::endl;
+        //             if (keep_mask[k]) {
+        //                 // std::cout << "Keep token " << k << std::endl;
+        //                 pruned_token_buffer_stream.write(token_array[k-1]);
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     // Stage 3: Process sorted token buffer stream and write output data
     process_tokens:
     for (int i = 0; i < keep_tokens + 1; i++) { // +1 to include cls_token
-        token_buf_t token_buffer = sorted_token_buffer_stream.read();
+        token_buf_t token_buffer = pruned_token_buffer_stream.read();
         for (int j = 0; j < D; j++) {
             #pragma HLS PIPELINE II=1
             res_T out_data;
