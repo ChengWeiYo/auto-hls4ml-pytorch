@@ -186,6 +186,10 @@ class Block(nn.Module):
                 cls_attn = attn[:, :, 0, 1:]  # [B, H, N-1]
                 cls_attn = cls_attn.mean(dim=1)  # [B, N-1]
                 _, idx = torch.topk(cls_attn, left_tokens, dim=1, largest=True, sorted=True)  # [B, left_tokens]
+                # print(idx.shape)
+                # print(cls_attn)
+                print(idx)
+                idx = torch.sort(idx, dim=1)[0]  # [B, left_tokens], sort to keep the original order
                 index = idx.unsqueeze(-1).expand(-1, -1, C)  # [B, left_tokens, C]
 
                 # B, N, C = x.shape
@@ -603,10 +607,11 @@ class TopK(nn.Module):
             curr_num_pool = x.shape[1] - self.num_clr
         else:
             curr_num_pool = x.shape[1]
-
+        # print("Input shape: {}".format(x.shape))
         for i, blk in enumerate(self.blocks):
             x, left_token, sample_idx = blk(x)
             # print(i, x.shape)
+            print(sample_idx)
 
             if self.viz_mode and sample_idx is not None:
                 decisions[i] = sample_idx.clone().detach().cpu().numpy()

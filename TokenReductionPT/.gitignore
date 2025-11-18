@@ -15,7 +15,7 @@
 # logs, results, txt files
 *.log
 *.out
-# *.txt
+*.txt
 #*.csv
 *.tsv
 # exception
@@ -39,6 +39,7 @@
 !**/results_inference/**/homura*_crops*
 !**/results_inference/**/cub*_crops*
 !**/results_inference/**/*rena*_crops*
+hls/
 
 # temp nfs files
 *.nfs*

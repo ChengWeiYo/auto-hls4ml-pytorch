@@ -313,6 +313,7 @@ class ToMeViT(nn.Module):
             self.patch_drop = nn.Identity()
         self.norm_pre = norm_layer(embed_dim) if pre_norm else nn.Identity()
 
+        self.debugging = getattr(args, 'debugging', False)
         token_ratio = getattr(args, 'keep_rate', [0.9])
         pruning_loc = getattr(args, 'reduction_loc', [9])
         self.viz_mode = getattr(args, 'viz_mode', False)
@@ -375,9 +376,9 @@ class ToMeViT(nn.Module):
         self.clc_pool_clr = getattr(args, 'clc_pool_clr', False)
         clc_recover_at_last = getattr(args, 'clc_recover_at_last', False)
         if clc_recover_at_last:
-            self.recovery_layers = self.reduction_loc + [depth - 2]
+            self.recovery_layers = self.pruning_loc + [depth - 2]
         else:
-            self.recovery_layers = self.reduction_loc
+            self.recovery_layers = self.pruning_loc
         if self.clc:
             num_clr = getattr(args, 'num_clr', 0)
             print(f'Cross-layer cache with {num_clr} tokens and {self.clc_include_gap} gap')
@@ -429,6 +430,7 @@ class ToMeViT(nn.Module):
     def reset_classifier(self, num_classes: int, global_pool = None) -> None:
         if self.ifa_head:
             self.norm = nn.Identity()
+            self.head = nn.Identity()
 
             inter_feats = (len(self.pruning_loc) + 1)
 
@@ -603,7 +605,9 @@ class ToMeViT(nn.Module):
 
         for i, blk in enumerate(self.blocks):
             x, attn_size, cluster_assign = blk(x, attn_size)
-            # print(i, x.shape)
+
+            if self.debugging:
+                print(i, x.shape)
 
             # cross layer post reduction aggregation
             if self.clc and (i in self.recovery_layers):
@@ -1786,4 +1790,3 @@ def tome_deit3_huge_patch14_224(pretrained=False, **kwargs):
     model_args = dict(patch_size=14, embed_dim=1280, depth=32, num_heads=16, no_embed_class=True, init_values=1e-6)
     model = _create_vision_transformer('tome_deit3_huge_patch14_224', pretrained=pretrained, **dict(model_args, **kwargs))
     return model
-

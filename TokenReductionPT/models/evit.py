@@ -206,13 +206,15 @@ class Block(nn.Module):
             left_tokens = math.ceil(self.keep_rate * (N - 1))
             if left_tokens != N - 1:
                 assert left_tokens >= 1
-                cls_attn = attn[:, :, 0, 1:]  # [B, H, N-1]
-                cls_attn = cls_attn.mean(dim=1)  # [B, N-1]
+                # attn = Q * K, Q[B, H, D, N] K[B, H, D, N] attn[B, H, N, N]
+                cls_attn = attn[:, :, 0, 1:]  # [B, H, N-1] # [1, 3, 196]
+                cls_attn = cls_attn.mean(dim=1)  # [B, N-1] # [1, 196]
                 _, idx = torch.topk(cls_attn, left_tokens, dim=1, largest=True, sorted=True)  # [B, left_tokens]
-                index = idx.unsqueeze(-1).expand(-1, -1, C)  # [B, left_tokens, C]
-
+                idx = torch.sort(idx, dim=1)[0]  # [B, left_tokens], sort to keep the original order
+                index = idx.unsqueeze(-1).expand(-1, -1, C)  # [B, left_tokens, C] # C=192
+                
                 # B, N, C = x.shape
-                non_cls = x[:, 1:]
+                non_cls = x[:, 1:] # [B, N-1, C]
                 x_others = torch.gather(non_cls, dim=1, index=index)  # [B, left_tokens, C]
                 
                 compl = complement_idx(idx, N - 1)  # [B, N-1-left_tokens]

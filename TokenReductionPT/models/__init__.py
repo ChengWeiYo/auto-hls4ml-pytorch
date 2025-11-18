@@ -8,3 +8,4 @@ from .sit import *
 from .patchmerger import *
 from .vit_h2t import *
 from .vit_vqt import *
+from .topk import *
