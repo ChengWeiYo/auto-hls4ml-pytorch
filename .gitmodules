@@ -3,4 +3,4 @@
 	url = git@github.com:snel-repo/neural-data-transformers.git
 [submodule "hls4ml"]
 	path = hls4ml
-	url = git@github.com:LingChiYang/hls4ml.git
+	url = https://github.com/ChengWeiYo/hls4ml.git
