@@ -40,6 +40,7 @@
 !**/results_inference/**/cub*_crops*
 !**/results_inference/**/*rena*_crops*
 hls/
+TokenReductionPT/
 
 # temp nfs files
 *.nfs*
